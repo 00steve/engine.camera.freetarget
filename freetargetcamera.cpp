@@ -90,8 +90,9 @@ void FreeTargetCamera::Update(){
 	currentRotation = rotation
 		+ (animationRotation * animationProgress * (1-animationEase))
 		+ (animationRotation * (cosf(3.14*animationProgress)*.5 + .5) * animationEase);
-    double progress = StepTime() / animationPeriod;
-    cout << progress << endl;
+    double progress = animationPeriod / 10000;
+    //cout << progress << endl;
+    //cout << "cam time : " << Node::TimeStep() << endl;
 	switch(loopStyle){
 	case CAMERA_LOOP_RESET:
 		animationProgress += progress;
