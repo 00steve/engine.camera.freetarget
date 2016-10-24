@@ -24,7 +24,7 @@ FreeTargetCamera::FreeTargetCamera() :
 
 
 void FreeTargetCamera::OnSetSettings(){
-
+    cout << "FreeTargetCamera::TimeStepRef = " << TimeStepRef() << endl;
     //cout << "Camera::AssetLibrary id = " << &Assets() << endl;
     cout << "Load FreeTargetCamera settings\n";
 
@@ -70,10 +70,10 @@ void FreeTargetCamera::OnSetSettings(){
 		}
 	}
 	if(settings.IsSet("pivot")){
-		onPivot = true;
 		List<double> pivotList = settings.get<List<double> >("pivot");
 		if(pivotList.GetCount() == 3){
 			pivot = double3(pivotList[0],pivotList[1],pivotList[2]);
+            onPivot = true; //only set onPivot to true if valid values are passed in
 		} else {
 			cout << "\"pivot\" property not in correct format.\n";
 		}
@@ -83,6 +83,7 @@ void FreeTargetCamera::OnSetSettings(){
         cout << " - set animation period to " << animationPeriod << endl;
     }
 	Camera::OnSetSettings();
+
 }
 
 void FreeTargetCamera::Update(){
@@ -90,9 +91,9 @@ void FreeTargetCamera::Update(){
 	currentRotation = rotation
 		+ (animationRotation * animationProgress * (1-animationEase))
 		+ (animationRotation * (cosf(3.14*animationProgress)*.5 + .5) * animationEase);
-    double progress = animationPeriod / 10000;
-    //cout << progress << endl;
-    //cout << "cam time : " << Node::TimeStep() << endl;
+    double progress = TimeStep() * (double)1 / animationPeriod ;
+    cout << animationProgress << endl;
+    //cout << "cam time : " << TimeStep() << endl;
 	switch(loopStyle){
 	case CAMERA_LOOP_RESET:
 		animationProgress += progress;
@@ -137,7 +138,7 @@ bool FreeTargetCamera::TranslateView(){
     //h3dRender( _cam );
     //cout << "t";
 
-
+    cout << " translate ";
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
